@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const db = require('./db');
+const booksRoutes = require('./routes/books');
 
 const app = express();
 const PORT = 5000;
@@ -14,6 +14,9 @@ app.use((req, res, next) => {
 // Middleware: Enable CORS and JSON parsing
 app.use(cors());
 app.use(express.json());
+
+//Mount rootes
+app.use('/books', booksRoutes);
 
 
 app.listen(PORT, () => {
