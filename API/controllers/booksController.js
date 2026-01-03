@@ -1,0 +1,98 @@
+const {validationResult} = require('express-validator');
+const {findAll, findById, create, update, remove} = require('../models/Books');
+
+const getAllBooks = async (req, res) => {
+    try {
+        const books = await findAll();
+        res.status(200).json(books);
+    } catch (error) {
+        console.error("Error fetching books:", error);
+        res.status(500).json({ error: "Failed to get books" });
+    }
+};
+
+const getBookById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const book = await findById(id);
+        if (!book) {
+            return res.status(404).json({ error: "Book not found" });
+        }
+        res.status(200).json(book);
+    } catch (error) {
+        console.error("Error fetching book:", error);
+        res.status(500).json({ error: "Failed to get book by ID" });
+    }
+};
+
+const createBook = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ 
+            error: errors.array() 
+        });
+    }
+    try {
+        const {title, author, publishedYear, genre, quantity} = req.body;
+        
+        const newBook = {
+            title: title,
+            author: author,
+            publishedYear: parseInt(publishedYear),
+            genre: genre,
+            initialQuantity: parseInt(quantity),
+            currentQuantity: parseInt(quantity), 
+            available: parseInt(quantity) > 0
+        };
+
+        const bookId = await create(newBook);
+        res.status(201).json({ id: bookId});
+    } catch (error) {
+        console.error("Error creating book:", error);
+        res.status(500).json({ error: "Failed to create book" });
+        
+    }
+};
+
+
+const updateBook = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ 
+            error: errors.array() 
+        });
+    }
+    try {
+        const id = req.params.id;
+        const {title, author, publishedYear, genre, quantity} = req.body;
+
+        const book= await findById(id);
+        if (!book) {
+            return res.status(404).json({ error: "Book not found" });
+        }
+        const updatedData = {};
+        if (title) updatedData.title = title;
+        if (author) updatedData.author = author;
+        if (publishedYear) updatedData.publishedYear = parseInt(publishedYear);
+        if (genre) updatedData.genre = genre;
+        if (quantity){
+            updatedData.initialQuantity = parseInt(quantity);
+            const quantityDiff = parseInt(quantity) - book.initialQuantity;
+            updatedData.currentQuantity = book.currentQuantity + quantityDiff;
+            updatedData.available = updatedData.currentQuantity > 0;    
+        }
+        const updatedBook = await update(id, updatedData);
+        res.status(200).json(updatedBook);
+    } catch (error) {
+        console.error("Error updating book:", error);
+        res.status(500).json({ error: "Failed to update book" });
+    } 
+};
+
+module.exports = {
+    getAllItems,
+    getItemById,
+    createItem,
+    updateItem,
+    deleteItem
+};
