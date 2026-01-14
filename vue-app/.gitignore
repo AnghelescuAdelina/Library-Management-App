@@ -32,5 +32,5 @@ coverage
 /cypress/videos/
 /cypress/screenshots/
 
-# Vitest
-__screenshots__/
+# Firebase configuration
+src/firebaseConfig.js
