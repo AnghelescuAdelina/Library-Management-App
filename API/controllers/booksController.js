@@ -22,7 +22,7 @@ const getBookById = async (req, res) => {
     } catch (error) {
         console.error("Error fetching book:", error);
         res.status(500).json({ error: "Failed to get book by ID" });
-    }
+    } 
 };
 
 const createBook = async (req, res) => {
