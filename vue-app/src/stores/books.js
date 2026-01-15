@@ -116,7 +116,7 @@ export const useBooksStore = defineStore('books', () => {
     }
   }
 
-  async function fetchBook() {
+  async function fetchBook(id) {
     isLoading.value = true
     error.value = null
     try {
