@@ -116,6 +116,20 @@ export const useBooksStore = defineStore('books', () => {
     }
   }
 
+  async function fetchBook() {
+    isLoading.value = true
+    error.value = null
+    try {
+      const response = await fetch(`${API_BASE_URL}/books/${id}`) 
+      if (!response.ok) throw new Error('Failed to fetch book.')
+      return await response.json()
+    } catch (e) {
+      error.value = e.message
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   return {
     books,
     isLoading,
@@ -125,6 +139,7 @@ export const useBooksStore = defineStore('books', () => {
     updateBook,
     deleteBook,
     subscribeToBooks,
-    unsubscribe
+    unsubscribe,
+    fetchBook
   }
 })
