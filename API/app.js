@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const booksRoutes = require('./routes/books');
-const userRoutes = require('./routes/users');
+const usersRoutes = require('./routes/users');
 
 const app = express();
 const PORT = 5000;
@@ -16,9 +16,9 @@ app.use((req, res, next) => {
 app.use(cors());
 app.use(express.json());
 
-//Mount rootes
+//Mount routes
 app.use('/books', booksRoutes);
-app.use('/users', userRoutes);
+app.use('/users', usersRoutes);
 
 
 app.listen(PORT, () => {
