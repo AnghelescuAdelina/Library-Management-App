@@ -21,77 +21,165 @@ onUnmounted(() => {
 
 <template>
   <div class="container">
-    <h1>Biblioteca Mea</h1>
-    <div v-if="isLoading">Se încarcă cărțile...</div>
+    <div class="header-flex">
+      <h1>📚 Biblioteca Noastră</h1>
+      <RouterLink v-if="authStore.isAdmin" to="/books/create" class="create-btn">
+        + Adaugă Carte
+      </RouterLink>
+    </div>
+
+    <div v-if="isLoading" class="loading">Se încarcă rafturile...</div>
     <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
     
-    <div v-if="booksStore.books.length > 0" class="items-list">
-      <div class="item-header">
-        <div class="item-name">Titlu și Autor</div>
-        <div class="item-price">An Publicare</div>
-        <div class="item-action">Acțiuni</div>
-      </div>
-      
-      <div v-for="book in booksStore.books" :key="book.id" class="item">
-        <div class="item-name">
-          <strong>{{ book.title }}</strong>
-          <p>{{ book.author }}</p>
+    <div v-if="booksStore.books.length > 0" class="books-grid">
+      <div v-for="book in booksStore.books" :key="book.id" class="book-card">
+        <div class="card-content">
+          <span class="year-badge">{{ book.publishedYear }}</span>
+          <h3>{{ book.title }}</h3>
+          <p class="author">de {{ book.author }}</p>
+          <p class="stock" :class="{ 'no-stock': book.stock <= 0 }">
+            Stoc: {{ book.stock > 0 ? book.stock + ' exemplare' : 'Indisponibil' }}
+          </p>
         </div>
-        <div class="item-price">{{ book.publishedYear }}</div>
-        <div class="item-action">
-          <RouterLink :to="{ name: 'book-detail', params: { id: book.id } }">Vezi</RouterLink>
+        
+        <div class="card-actions">
+          <RouterLink :to="{ name: 'book-detail', params: { id: book.id } }" class="btn-view">
+            Detalii
+          </RouterLink>
+          <button 
+            v-if="authStore.isAuthenticated" 
+            @click="booksStore.borrowBook(book.id)"
+            :disabled="book.stock <= 0"
+            class="btn-borrow"
+          >
+            Împrumută
+          </button>
         </div>
       </div>
     </div>
     
-    <div v-else-if="!isLoading">
-      <p>Nu am găsit nicio carte.</p>
+    <div v-else-if="!isLoading" class="empty-state">
+      <p>Nu am găsit nicio carte în acest moment.</p>
     </div>
-    
-    <RouterLink v-if="authStore.isAuthenticated" to="/books/create" class="create-btn">
-      Adaugă Carte Nouă
-    </RouterLink>
   </div>
 </template>
 
 <style scoped>
 .container {
-  max-width: 800px;
-  margin: 2rem auto;
+  max-width: 1100px;
+  margin: 0 auto;
   padding: 2rem;
 }
-.items-list {
-  margin-top: 2rem;
-}
-.item-header, .item {
+
+.header-flex {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
-  border-bottom: 1px solid #eee;
+  margin-bottom: 3rem;
 }
-.item-header {
+
+.books-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.book-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #eee;
+}
+
+.book-card:hover {
+  transform: translateY(-5px);
+}
+
+.card-content {
+  padding: 1.5rem;
+  flex-grow: 1;
+}
+
+.year-badge {
+  background: #f0fdf4;
+  color: #16a34a;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
   font-weight: bold;
-  border-bottom-width: 2px;
 }
-.item-name {
-  flex: 3;
+
+h3 {
+  margin: 1rem 0 0.5rem 0;
+  font-size: 1.25rem;
+  color: #1a202c;
 }
-.item-price {
+
+.author {
+  color: #718096;
+  font-style: italic;
+  margin-bottom: 1rem;
+}
+
+.stock {
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: #2d3748;
+}
+
+.no-stock {
+  color: #e53e3e;
+}
+
+.card-actions {
+  padding: 1rem;
+  background: #f8fafc;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-view, .btn-borrow, .create-btn {
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+  font-size: 0.9rem;
+}
+
+.btn-view {
+  background: #edf2f7;
+  color: #4a5568;
   flex: 1;
-  text-align: right;
 }
-.item-action {
-  flex: 1;
-  text-align: right;
-}
-.create-btn {
-  display: inline-block;
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
+
+.btn-borrow {
   background: #42b983;
   color: white;
-  text-decoration: none;
-  border-radius: 4px;
+  flex: 2;
+}
+
+.btn-borrow:disabled {
+  background: #cbd5e0;
+  cursor: not-allowed;
+}
+
+.create-btn {
+  background: #42b983;
+  color: white;
+}
+
+.error-message {
+  background: #fff5f5;
+  color: #c53030;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
 }
 </style>
