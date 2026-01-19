@@ -1,5 +1,5 @@
 const { comparePassword } = require('../auth');
-const db = require('./firebaseAdmin'); 
+const db = require('../db'); 
 
 const usersCollection = db.collection('users')
 
