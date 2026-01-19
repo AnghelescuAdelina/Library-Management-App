@@ -1,0 +1,41 @@
+:root {
+  --primary: #1e3a8a; /* Albastru regal */
+  --secondary: #42b983; /* Verdele de succes */
+  --danger: #ef4444;
+  --bg: #f8fafc;
+  --text: #1e293b;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  margin: 0;
+}
+
+.container {
+  background: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border-radius: 12px !important;
+  border: none !important;
+  padding: 30px !important;
+}
+
+button {
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease;
+  border: none;
+  padding: 12px 20px !important;
+  cursor: pointer;
+}
+
+button:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.borrow-btn { background: var(--secondary); color: white; flex: 2; }
+.edit-btn { background: var(--primary); color: white; }
+.delete-btn { background: var(--danger); color: white; }
+.back-btn { background: transparent !important; color: #64748b !important; border: 1px solid #cbd5e1 !important; }

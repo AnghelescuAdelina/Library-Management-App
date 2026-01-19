@@ -1,59 +1,133 @@
 <script setup>
+import { RouterLink, RouterView, useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth' 
+const router = useRouter()
+const authStore = useAuthStore() 
 
-import {RouterLink, RouterView, useRouter} from 'vue-router'
-
-
-const router=useRouter()
-
-
-function handleLogout(){
-  router.push('/')
+function handleLogout() {
+  authStore.logout()
+  router.push('/login') 
 }
 </script>
 
 <template>
-  <header>
-    <img alt="Library logo" class="logo" src="@/assets/Library Logo.png" width="125" height="125" />
+  <header class="navbar">
+    <div class="nav-container">
+      <RouterLink to="/" class="brand">
+        <img alt="Library logo" class="logo" src="@/assets/Library Logo.png" />
+        <span class="brand-name">BiblioTech</span>
+      </RouterLink>
 
-    <div class = "wrapper">
-      <nav>
-      <RouterLink to="/books">Books</RouterLink>
+      <nav class="wrapper">
+        <div class="nav-links">
+          <RouterLink to="/books">Cărți</RouterLink>
 
+          <template v-if="!authStore.isAuthenticated">
+            <RouterLink to="/login">Autentificare</RouterLink>
+            <RouterLink to="/register" class="btn-primary">Cont Nou</RouterLink>
+          </template>
+
+          <template v-else>
+            <span class="welcome-msg">Salut, {{ authStore.user?.name || 'Utilizator' }}</span>
+            <button @click="handleLogout" class="btn-logout">Ieșire</button>
+          </template>
+        </div>
       </nav>
     </div>
   </header>
 
-  <RouterView />
+  <main class="main-content">
+    <RouterView />
+  </main>
 </template>
 
 <style scoped>
-<style scoped>
-header {
-  line-height: 1.5;
+.navbar {
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 2rem;
-  border-bottom: 1px solid var(--color-border);
-  background-color: var(--color-background);
+  padding: 0.75rem 2rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-decoration: none;
 }
 
 .logo {
-  height: 50px;
-  width: 50px;
+  height: 40px;
+  width: 40px;
+  object-fit: contain;
 }
 
-.wrapper {
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
+.brand-name {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #1e3a8a; 
 }
 
-nav {
+.nav-links {
   display: flex;
-  gap: 2rem;
-  font-size: 1rem;
   align-items: center;
+  gap: 1.5rem;
 }
 
+.nav-links a {
+  text-decoration: none;
+  color: #64748b;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover, .nav-links a.router-link-active {
+  color: #1e3a8a;
+}
+
+.welcome-msg {
+  color: #1e293b;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-left: 2px solid #e2e8f0;
+  padding-left: 1.5rem;
+}
+
+.btn-primary {
+  background-color: #1e3a8a;
+  color: white !important;
+  padding: 0.5rem 1.25rem !important;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.btn-logout {
+  background: none;
+  border: 1px solid #e2e8f0;
+  color: #ef4444;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.btn-logout:hover {
+  background-color: #fef2f2;
+  border-color: #fecaca;
+}
+
+.main-content {
+  padding-top: 1rem;
+}
 </style>
