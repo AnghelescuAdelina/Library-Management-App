@@ -34,3 +34,4 @@ coverage
 
 # Firebase configuration
 src/firebaseConfig.js
+src/firebase.js
