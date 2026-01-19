@@ -12,7 +12,7 @@ const authStore = useAuthStore()
 
 const id = route.params.id
 const isEditing = ref(false)
-const bookData = ref({ title: '', author: '', publishedYear: '', stock:0 })
+const bookData = ref({ title: '', author: '', publishedYear: '', currentQuantity: 0 })
 
 onMounted(async () => {
   const book = booksStore.books.find(b => b.id === id)
@@ -61,17 +61,17 @@ async function handleDelete() {
         <p><strong>Titlu:</strong> {{ bookData.title }}</p>
         <p><strong>Autor:</strong> {{ bookData.author }}</p>
         <p><strong>An:</strong> {{ bookData.publishedYear }}</p>
-        <p><strong>Stoc disponibil:</strong> {{ bookData.stock }} exemplare</p>
+        <p><strong>Stoc disponibil:</strong> {{ bookData.currentQuantity }} exemplare</p>
       </div>
 
       <div class="actions">
         <button 
           v-if="authStore.isAuthenticated" 
           @click="handleBorrow" 
-          :disabled="bookData.stock <= 0"
+          :disabled="bookData.currentQuantity <= 0"
           class="borrow-btn"
         >
-          {{ bookData.stock > 0 ? 'Împrumută Cartea' : 'Stoc Epuizat' }}
+          {{ bookData.currentQuantity > 0 ? 'Împrumută Cartea' : 'Stoc Epuizat' }}
         </button>
 
         <template v-if="authStore.isAdmin">

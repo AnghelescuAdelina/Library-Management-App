@@ -37,8 +37,8 @@ onUnmounted(() => {
           <span class="year-badge">{{ book.publishedYear }}</span>
           <h3>{{ book.title }}</h3>
           <p class="author">de {{ book.author }}</p>
-          <p class="stock" :class="{ 'no-stock': book.stock <= 0 }">
-            Stoc: {{ book.stock > 0 ? book.stock + ' exemplare' : 'Indisponibil' }}
+          <p class="stock" :class="{ 'no-stock': book.currentQuantity <= 0 }">
+               Stoc: {{ book.currentQuantity > 0 ? book.currentQuantity + ' exemplare' : 'Indisponibil' }}
           </p>
         </div>
         
@@ -49,7 +49,7 @@ onUnmounted(() => {
           <button 
             v-if="authStore.isAuthenticated" 
             @click="booksStore.borrowBook(book.id)"
-            :disabled="book.stock <= 0"
+            :disabled="book.currentQuantity <= 0"
             class="btn-borrow"
           >
             Împrumută
