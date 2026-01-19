@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useBooksStore } from '@/stores/books'
 import { useAuthStore } from '@/stores/auth'
-import { S } from 'vue-router/dist/router-CWoNjPRp.mjs'
+
 
 const route = useRoute()
 const router = useRouter()
