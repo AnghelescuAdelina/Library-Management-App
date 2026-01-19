@@ -1,5 +1,6 @@
 const {validationResult} = require('express-validator');
 const {findAll, findById, create, update, remove} = require('../models/Books');
+const { db } = require('../db');
 
 const getAllBooks = async (req, res) => {
     try {
@@ -104,10 +105,78 @@ const deleteBook = async (req, res) => {
     }
 };
 
+const borrowBook = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const userId = req.user.userId;
+        const userEmail = req.user.email;
+
+        const book = await findById(id);
+        if (!book) {
+            return res.status(404).json({ error: "Book not found" });
+        }
+        if (book.currentQuantity <= 0) {
+            return res.status(400).json({ error: "Book is currently unavailable" });
+        }   
+
+        const updatedData = {
+            currentQuantity: book.currentQuantity - 1,
+            available: (book.currentQuantity - 1) > 0
+        };
+        await update(id, updatedData);
+        await db.collection('history').add({
+            bookId: id,
+            bookTitle: book.title,
+            userId: userId,
+            userEmail: userEmail,
+            action: 'borrowed',
+            date: new Date()
+        });
+        res.status(200).json({ message: "Book borrowed successfully" });
+    } catch (error) {
+        console.error("Error borrowing book:", error);
+        res.status(500).json({ error: "Failed to borrow book" });
+    }
+};
+const returnBook = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const userId = req.user.userId;
+        const userEmail = req.user.email;
+
+        const book = await findById(id);
+        if (!book) {
+            return res.status(404).json({ error: "Book not found" });
+        }
+
+        if (book.currentQuantity >= book.initialQuantity) {
+            return res.status(400).json({ error: "All copies of this book are already returned" });
+        }
+        const updatedData = {
+            currentQuantity: book.currentQuantity + 1,
+            available: true
+        };
+        await update(id, updatedData);
+        await db.collection('history').add({
+            bookId: id,
+            bookTitle: book.title,
+            userId: userId,
+            userEmail: userEmail,
+            action: 'returned',
+            date: new Date()
+        });
+        res.status(200).json({ message: "Book returned successfully" });
+    } catch (error) {
+        console.error("Error returning book:", error);
+        res.status(500).json({ error: "Failed to return book" });
+    }
+};
 module.exports = {
     getAllBooks,
     getBookById,
     createBook,
     updateBook,
-    deleteBook
+    deleteBook,
+    borrowBook,
+    returnBook
 };
