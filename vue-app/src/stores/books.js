@@ -74,7 +74,6 @@ export const useBooksStore = defineStore('books', () => {
     }
   }
 
-  // Adaugă aici și restul funcțiilor (updateBook, deleteBook) după același model
   async function updateBook(id, book) {
     const authStore = useAuthStore()
     isLoading.value = true
@@ -130,6 +129,51 @@ export const useBooksStore = defineStore('books', () => {
     }
   }
 
+  async function borrowBook(bookId) {
+  const authStore = useAuthStore()
+  
+  try {
+    const response = await fetch(`http://localhost:5000/api/books/${bookId}/borrow`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authStore.token}` 
+      }
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.message || 'Eroare la împrumut')
+    }
+
+    alert('Carte împrumutată cu succes!')
+    await subscribeToBooks() 
+    
+  } catch (err) {
+    console.error("Eroare împrumut:", err.message)
+    alert(err.message)
+  }
+}
+
+async function returnBook(bookId) {
+  const authStore = useAuthStore()
+  try {
+    const response = await fetch(`http://localhost:5000/api/books/${bookId}/return`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authStore.token}`
+      }
+    })
+    const data = await response.json()
+    if (!response.ok) throw new Error(data.message || 'Eroare la returnare')
+    
+    alert('Carte returnată cu succes!')
+  } catch (err) {
+    alert(err.message)
+  }
+}
+
   return {
     books,
     isLoading,
@@ -140,6 +184,8 @@ export const useBooksStore = defineStore('books', () => {
     deleteBook,
     subscribeToBooks,
     unsubscribe,
-    fetchBook
+    fetchBook,
+    borrowBook,
+    returnBook
   }
 })
