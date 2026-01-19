@@ -19,6 +19,15 @@ function validateToken(req, res, next) {
 
     req.user = decoded;
     next();
+
 }
 
-module.exports = { validateToken };
+function isAdmin(req, res, next) {
+    if (req.user && req.user.role === 'admin') {
+        next();
+    } else {
+        res.status(403).json({ error: "Acces interzis. Doar administratorii pot face asta." });
+    }
+}
+
+module.exports = { validateToken, isAdmin };
