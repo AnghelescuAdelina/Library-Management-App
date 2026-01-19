@@ -2,17 +2,19 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useBooksStore } from '@/stores/books'
+import { useAuthStore } from '@/stores/auth'
+import { S } from 'vue-router/dist/router-CWoNjPRp.mjs'
 
 const route = useRoute()
 const router = useRouter()
 const booksStore = useBooksStore()
+const authStore = useAuthStore()
 
 const id = route.params.id
 const isEditing = ref(false)
-const bookData = ref({ title: '', author: '', publishedYear: '' })
+const bookData = ref({ title: '', author: '', publishedYear: '', stock:0 })
 
 onMounted(async () => {
-  // Căutăm cartea în lista deja descărcată în store
   const book = booksStore.books.find(b => b.id === id)
   if (book) {
     bookData.value = { ...book }
@@ -32,6 +34,14 @@ async function handleUpdate() {
   }
 }
 
+async function handleBorrow() {
+  await booksStore.borrowBook(id)
+  if (!booksStore.error) {
+    alert('Carte împrumutată cu succes!')
+    bookData.value.stock -= 1
+  }
+}
+
 async function handleDelete() {
   if (confirm('Sigur vrei să ștergi această carte?')) {
     await booksStore.deleteBook(id)
@@ -46,38 +56,39 @@ async function handleDelete() {
   <div class="container">
     <h1>Detalii Carte</h1>
     
-    <div v-if="!isEditing">
-      <p><strong>Titlu:</strong> {{ bookData.title }}</p>
-      <p><strong>Autor:</strong> {{ bookData.author }}</p>
-      <p><strong>An:</strong> {{ bookData.publishedYear }}</p>
-      
+    <div v-if="!isEditing" class="details-card">
+      <div class="info">
+        <p><strong>Titlu:</strong> {{ bookData.title }}</p>
+        <p><strong>Autor:</strong> {{ bookData.author }}</p>
+        <p><strong>An:</strong> {{ bookData.publishedYear }}</p>
+        <p><strong>Stoc disponibil:</strong> {{ bookData.stock }} exemplare</p>
+      </div>
+
       <div class="actions">
-        <button @click="isEditing = true" class="edit-btn">Editează</button>
-        <button @click="handleDelete" class="delete-btn">Șterge</button>
+        <button 
+          v-if="authStore.isAuthenticated" 
+          @click="handleBorrow" 
+          :disabled="bookData.stock <= 0"
+          class="borrow-btn"
+        >
+          {{ bookData.stock > 0 ? 'Împrumută Cartea' : 'Stoc Epuizat' }}
+        </button>
+
+        <template v-if="authStore.isAdmin">
+          <button @click="isEditing = true" class="edit-btn">Editează</button>
+          <button @click="handleDelete" class="delete-btn">Șterge</button>
+        </template>
       </div>
     </div>
 
     <form v-else @submit.prevent="handleUpdate">
-      <div class="form-group">
-        <label>Titlu:</label>
-        <input v-model="bookData.title" required>
-      </div>
-      <div class="form-group">
-        <label>Autor:</label>
-        <input v-model="bookData.author" required>
-      </div>
-      <div class="form-group">
-        <label>An:</label>
-        <input v-model="bookData.publishedYear" type="number" required>
-      </div>
-      
       <div class="actions">
         <button type="submit" class="save-btn">Salvează</button>
         <button type="button" @click="isEditing = false" class="cancel-btn">Anulează</button>
       </div>
     </form>
     
-    <button @click="router.push('/books')" class="back-btn">Înapoi la listă</button>
+    <button @click="router.push('/books')" class="back-btn">← Înapoi la listă</button>
   </div>
 </template>
 
