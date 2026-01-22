@@ -1,6 +1,6 @@
 const {validationResult} = require('express-validator');
 const {findAll, findById, create, update, remove} = require('../models/Books');
-const { db } = require('../db');
+const db  = require('../db');
 
 const getAllBooks = async (req, res) => {
     try {

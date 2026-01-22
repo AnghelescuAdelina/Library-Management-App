@@ -131,9 +131,8 @@ export const useBooksStore = defineStore('books', () => {
 
   async function borrowBook(bookId) {
   const authStore = useAuthStore()
-  
   try {
-    const response = await fetch(`http://localhost:5000/api/books/${bookId}/borrow`, {
+    const response = await fetch(`${API_BASE_URL}/books/${bookId}/borrow`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -144,6 +143,11 @@ export const useBooksStore = defineStore('books', () => {
     if (!response.ok) {
       const errorData = await response.json()
       throw new Error(errorData.message || 'Eroare la împrumut')
+    }
+
+    const bookIndex = books.value.findIndex(b => b.id === bookId)
+    if (bookIndex !== -1) {
+      books.value[bookIndex].currentQuantity -= 1 
     }
 
     alert('Carte împrumutată cu succes!')
@@ -158,7 +162,7 @@ export const useBooksStore = defineStore('books', () => {
 async function returnBook(bookId) {
   const authStore = useAuthStore()
   try {
-    const response = await fetch(`http://localhost:5000/api/books/${bookId}/return`, {
+    const response = await fetch(`${API_BASE_URL}/books/${bookId}/return`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -168,6 +172,10 @@ async function returnBook(bookId) {
     const data = await response.json()
     if (!response.ok) throw new Error(data.message || 'Eroare la returnare')
     
+    const bookIndex = books.value.findIndex(b => b.id === bookId)
+    if (bookIndex !== -1) {
+      books.value[bookIndex].currentQuantity += 1 
+    }
     alert('Carte returnată cu succes!')
   } catch (err) {
     alert(err.message)

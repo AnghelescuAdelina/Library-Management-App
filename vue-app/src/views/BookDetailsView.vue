@@ -42,6 +42,13 @@ async function handleBorrow() {
   }
 }
 
+async function handleReturn() {
+  await booksStore.returnBook(id)
+  if (!booksStore.error) {
+    bookData.value.currentQuantity += 1 
+  }
+}
+
 async function handleDelete() {
   if (confirm('Sigur vrei să ștergi această carte?')) {
     await booksStore.deleteBook(id)
@@ -72,6 +79,13 @@ async function handleDelete() {
           class="borrow-btn"
         >
           {{ bookData.currentQuantity > 0 ? 'Împrumută Cartea' : 'Stoc Epuizat' }}
+        </button>
+        <button 
+          v-if="authStore.isAuthenticated" 
+          @click="handleReturn" 
+          class="btn-return"
+        >  
+        Returnează Cartea
         </button>
 
         <template v-if="authStore.isAdmin">
