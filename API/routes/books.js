@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const {getAllBooks, getBookById, createBook, updateBook, deleteBook, borrowBook, returnBook} = require('../controllers/booksController');
+const {getAllBooks, getBookById, createBook, updateBook, deleteBook, borrowBook, returnBook, getUserHistory} = require('../controllers/booksController');
 const {bookValidaton}   = require('../validators/booksValidator');
 const { validateToken, isAdmin } = require('../middleware/auth');
 //Public routes
 router.get('/', getAllBooks);
+router.get('/history', validateToken, getUserHistory);
+
 router.get('/:id', getBookById);
 
 //Protected routes

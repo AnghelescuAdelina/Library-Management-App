@@ -10,6 +10,7 @@ export const useBooksStore = defineStore('books', () => {
   const books = ref([]) 
   const isLoading = ref(false)
   const error = ref(null)
+  const historyItems = ref([])
 
   let unsubscribeFromBooks = null;
 
@@ -129,6 +130,30 @@ export const useBooksStore = defineStore('books', () => {
     }
   }
 
+async function fetchUserHistory() {
+    const authStore = useAuthStore()
+    isLoading.value = true
+    error.value = null
+    try {
+      const response = await fetch(`${API_BASE_URL}/books/history`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${authStore.token}` 
+        }
+      })
+      
+      const data = await response.json()
+      if (!response.ok) throw new Error(data.error || 'Failed to fetch history.')
+      
+      historyItems.value = data 
+    } catch (e) {
+      error.value = e.message
+      console.error("Store Error History:", e.message)
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   async function borrowBook(bookId) {
   const authStore = useAuthStore()
   try {
@@ -149,7 +174,7 @@ export const useBooksStore = defineStore('books', () => {
     if (bookIndex !== -1) {
       books.value[bookIndex].currentQuantity -= 1 
     }
-
+    await fetchUserHistory()
     alert('Carte împrumutată cu succes!')
     await subscribeToBooks() 
     
@@ -176,16 +201,20 @@ async function returnBook(bookId) {
     if (bookIndex !== -1) {
       books.value[bookIndex].currentQuantity += 1 
     }
+    await fetchUserHistory()
     alert('Carte returnată cu succes!')
   } catch (err) {
     alert(err.message)
   }
+
+  
 }
 
   return {
     books,
     isLoading,
     error,
+    historyItems,
     fetchBooks,
     createBook,
     updateBook,
@@ -194,6 +223,7 @@ async function returnBook(bookId) {
     unsubscribe,
     fetchBook,
     borrowBook,
-    returnBook
+    returnBook,
+    fetchUserHistory
   }
 })

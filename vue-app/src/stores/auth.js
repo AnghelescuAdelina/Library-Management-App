@@ -27,11 +27,17 @@ export const useAuthStore = defineStore('auth', () => {
         throw new Error(data.error || 'Login failed')
       }
 
-      user.value = data.user
-      token.value = data.token
+      const userWithUid = {
+      ...data.user,
+      uid: data.user.id 
+    };
+
+      user.value = userWithUid;
+      //user.value = data.user
+      token.value = data.token;
 
       localStorage.setItem('authToken', data.token)
-      localStorage.setItem('authUser', JSON.stringify(data.user))
+      localStorage.setItem('authUser', JSON.stringify(userWithUid))
       return data
     }catch (error) {
       console.error('Login error:', error)
@@ -54,12 +60,16 @@ export const useAuthStore = defineStore('auth', () => {
       if (!response.ok) {
         throw new Error(data.error || 'Registration failed')
       }
+      const userWithUid = {
+      ...data.user,
+      uid: data.user.id 
+    };
 
-      user.value = data.user
-      token.value = data.token
+      user.value = data.userWithUid;
+      token.value = data.token;
 
       localStorage.setItem('authToken', data.token)
-      localStorage.setItem('authUser', JSON.stringify(data.user))
+      localStorage.setItem('authUser', JSON.stringify(userWithUid))
 
       return data
     } catch (error) {
