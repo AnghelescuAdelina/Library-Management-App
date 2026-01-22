@@ -170,10 +170,10 @@ async function fetchUserHistory() {
       throw new Error(errorData.message || 'Eroare la împrumut')
     }
 
-    const bookIndex = books.value.findIndex(b => b.id === bookId)
-    if (bookIndex !== -1) {
-      books.value[bookIndex].currentQuantity -= 1 
-    }
+    //const bookIndex = books.value.findIndex(b => b.id === bookId)
+    //if (bookIndex !== -1) {
+    //  books.value[bookIndex].currentQuantity -= 1 
+    //}
     await fetchUserHistory()
     alert('Carte împrumutată cu succes!')
     await subscribeToBooks() 
