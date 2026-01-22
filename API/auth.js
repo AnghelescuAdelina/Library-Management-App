@@ -30,7 +30,8 @@ async function comparePassword(password, hashedPassword) {
 function generateToken(user) {
     const userData = {
         userId: user.id,
-        email: user.email
+        email: user.email,
+        role: user.role || 'user'
     };
 
     return jwt.sign(userData, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });

@@ -33,7 +33,8 @@ const login = async (req, res) => {
         // Generate JWT token
         const token = generateToken({
             id: user.id,
-            email: user.email
+            email: user.email,
+            role: user.role || 'user'
         });
 
         res.status(200).json({
@@ -41,7 +42,8 @@ const login = async (req, res) => {
             token,
             user: {
                 id: user.id,
-                email: user.email
+                email: user.email,
+                role: user.role || 'user'
             }
         });
 
