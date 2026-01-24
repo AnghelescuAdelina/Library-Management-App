@@ -43,7 +43,7 @@ function handleLogout() {
 
 <style scoped>
 .navbar {
-  background-color: white;
+  background-color: rgb(243, 225, 190);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   position: sticky;
   top: 0;
@@ -68,15 +68,15 @@ function handleLogout() {
 }
 
 .logo {
-  height: 40px;
-  width: 40px;
+  height: 200px;
+  width: 200px;
   object-fit: contain;
 }
 
 .brand-name {
   font-size: 1.25rem;
   font-weight: 800;
-  color: #1e3a8a; 
+  color: #653607; 
 }
 
 .nav-links {
