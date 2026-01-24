@@ -135,7 +135,7 @@ async function fetchUserHistory() {
     isLoading.value = true
     error.value = null
     try {
-      const response = await fetch(`${API_BASE_URL}/books/history`, {
+      const response = await fetch(`${API_BASE_URL}/history`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${authStore.token}` 
