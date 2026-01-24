@@ -12,7 +12,7 @@ const authStore = useAuthStore()
 
 const id = route.params.id
 const isEditing = ref(false)
-const bookData = ref({ title: '', author: '', publishedYear: '', currentQuantity: 0 })
+const bookData = ref({ title: '', author: '', publishedYear: '', genre: '', currentQuantity: 0 })
 
 watch(
   () => booksStore.books, 
@@ -89,6 +89,7 @@ async function handleDelete() {
         <p><strong>Titlu:</strong> {{ bookData.title }}</p>
         <p><strong>Autor:</strong> {{ bookData.author }}</p>
         <p><strong>An:</strong> {{ bookData.publishedYear }}</p>
+        <p><strong>Gen:</strong> {{ bookData.genre}}</p>
         <p><strong>Stoc disponibil:</strong> {{ bookData.currentQuantity }} exemplare</p>
       </div>
 

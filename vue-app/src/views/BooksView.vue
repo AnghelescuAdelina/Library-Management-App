@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onUnmounted } from 'vue'                                
+import { ref,onMounted, computed, onUnmounted } from 'vue'                                
 import { useBooksStore } from '@/stores/books'                                     
 import { useAuthStore } from '@/stores/auth'                                     
 import { RouterLink } from 'vue-router' 
@@ -7,7 +7,20 @@ import { storeToRefs } from 'pinia';
                                                                                                     
 const booksStore = useBooksStore()
 const { isLoading, error: errorMessage } = storeToRefs(booksStore);                                        
-const authStore = useAuthStore()                                                                    
+const authStore = useAuthStore() 
+const selectedGenre = ref('')    
+
+const genres = computed(() => {
+  const allGenres = booksStore.books.map(book => book.genre).filter(Boolean)
+  return [...new Set(allGenres)] 
+})
+
+const filteredBooks = computed(() => {
+  if (!selectedGenre.value) {
+    return booksStore.books
+  }
+  return booksStore.books.filter(book => book.genre === selectedGenre.value)
+})
                                                                   
 onMounted(() => {                                                                               
   booksStore.subscribeToBooks();                                                               
@@ -31,8 +44,18 @@ onUnmounted(() => {
     <div v-if="isLoading" class="loading">Se încarcă rafturile...</div>
     <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
     
-    <div v-if="booksStore.books.length > 0" class="books-grid">
-      <div v-for="book in booksStore.books" :key="book.id" class="book-card">
+    <div class="filter-section">
+    <label for="genre-filter">Filtrează după gen:</label>
+  <select id="genre-filter" v-model="selectedGenre">
+    <option value="">Toate genurile</option>
+    <option v-for="genre in genres" :key="genre" :value="genre">
+      {{ genre }}
+    </option>
+  </select>
+</div>
+
+    <div v-if="filteredBooks.length > 0" class="books-grid">
+      <div v-for="book in filteredBooks" :key="book.id" class="book-card">
         <div class="card-content">
           <span class="year-badge">{{ book.publishedYear }}</span>
           <h3>{{ book.title }}</h3>
@@ -182,4 +205,23 @@ h3 {
   border-radius: 8px;
   margin-bottom: 2rem;
 }
+
+.filter-section {
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #f8fafc;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+select {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #cbd5e0;
+  background: white;
+  min-width: 150px;
+}
+
 </style>
