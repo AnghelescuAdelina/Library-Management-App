@@ -49,14 +49,13 @@ async function handleSubmit() {
 </script>
 
 <style scoped>
-/* Păstrăm exact stilul profesorului */
 .register-container {
   max-width: 700px;
   margin: 2rem auto;
   padding: 2rem;
 }
 h1 {
-  color: #42b983;
+  color: #6B4C3D;
   margin-bottom: 2rem;
   text-align: center;
 }
@@ -99,11 +98,11 @@ input:focus {
   border-radius: 4px;
   font-size: 1rem;
   cursor: pointer;
-  background: #42b983;
+  background: #6B4C3D;
   color: white;
 }
 .submit-btn:hover:not(:disabled) {
-  background: #359268;
+  background: #583224;
 }
 .submit-btn:disabled {
   background: #ccc;

@@ -38,7 +38,7 @@ const authStore = useAuthStore()
       <div v-if="!authStore.isAuthenticated" class="card login-card">
         <h3>🔑 Începe acum</h3>
         <p>Creează un cont cu adresa @gmail.com pentru a împrumuta cărți.</p>
-        <RouterLink to="/login" class="action-link">Autentificare</RouterLink>
+        <RouterLink to="/register" class="action-link">Înregistrează-te</RouterLink>
       </div>
     </div>
   </main>
@@ -57,13 +57,13 @@ const authStore = useAuthStore()
 }
 
 .welcome-section h1 {
-  color: #2c3e50;
+  color: #6e3208;
   font-size: 2.5rem;
   margin-bottom: 1rem;
 }
 
 .role-badge {
-  background: #42b983;
+  background: #6B4C3D;
   color: white;
   padding: 0.2rem 0.6rem;
   border-radius: 12px;
@@ -82,7 +82,7 @@ const authStore = useAuthStore()
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  border-top: 5px solid #42b983;
+  border-top: 5px solid #341F1A;
   transition: transform 0.2s;
 }
 
@@ -91,17 +91,17 @@ const authStore = useAuthStore()
 }
 
 .admin-card {
-  border-top-color: #e67e22; /* Portocaliu pentru Admin */
+  border-top-color: #e67e22; 
 }
 
 .login-card {
-  border-top-color: #3498db;
+  border-top-color: #6B4C3D;
 }
 
 .action-link {
   display: inline-block;
   margin-top: 1rem;
-  color: #42b983;
+  color: #583224;
   text-decoration: none;
   font-weight: bold;
 }

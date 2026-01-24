@@ -10,7 +10,7 @@ const title = ref('')
 const author = ref('')
 const publishedYear = ref('')
 const genre = ref('')
-const quantity = ref(1)
+const quantity = ref('')
 
 async function handleSubmit() {
   const newBook = {
@@ -72,7 +72,7 @@ async function handleSubmit() {
 .form-group { margin-bottom: 1rem; }
 label { display: block; margin-bottom: 0.5rem; }
 input { width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; }
-button { padding: 0.7rem 1.5rem; background: #42b983; color: white; border: none; border-radius: 4px; cursor: pointer; }
+button { padding: 0.7rem 1.5rem; background: #341F1A; color: white; border: none; border-radius: 4px; cursor: pointer; }
 button:disabled { background: #ccc; }
 .error { color: red; margin-top: 1rem; }
 </style>

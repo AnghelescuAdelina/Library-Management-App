@@ -43,9 +43,9 @@ function handleLogout() {
 
 <style scoped>
 .navbar {
-  background-color: rgb(243, 225, 190);
+  background-color: #CBB799;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  position: sticky;
+  position:static;
   top: 0;
   z-index: 1000;
   width: 100%;
@@ -87,7 +87,7 @@ function handleLogout() {
 
 .nav-links a {
   text-decoration: none;
-  color: #64748b;
+  color: #6B4C3D;
   font-weight: 500;
   transition: color 0.2s;
 }
@@ -105,7 +105,7 @@ function handleLogout() {
 }
 
 .btn-primary {
-  background-color: #1e3a8a;
+  background-color: #6B4C3D;
   color: white !important;
   padding: 0.5rem 1.25rem !important;
   border-radius: 8px;
@@ -113,7 +113,7 @@ function handleLogout() {
 }
 
 .btn-logout {
-  background: none;
+  background:white;
   border: 1px solid #e2e8f0;
   color: #ef4444;
   padding: 0.4rem 0.8rem;

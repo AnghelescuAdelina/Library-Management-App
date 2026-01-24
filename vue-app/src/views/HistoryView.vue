@@ -8,7 +8,6 @@ const isLoading = ref(true)
 onMounted(async () => {
   isLoading.value = true;
   try {
-    // Apelăm funcția nouă din store care aduce datele de la backend
     await booksStore.fetchUserHistory();
   } catch (error) {
     console.error("Eroare la încărcarea istoricului:", error);
@@ -19,7 +18,6 @@ onMounted(async () => {
 
 async function handleReturn(bookId) {
   if (confirm('Dorești să returnezi această carte?')) {
-    // Store-ul se ocupă acum de tot: API call + refresh listă
     await booksStore.returnBook(bookId);
   }
 }
@@ -40,7 +38,7 @@ async function handleReturn(bookId) {
     <div v-else class="books-grid">
       <div v-for="item in booksStore.historyItems" :key="item.id" class="book-card">
         <div class="card-content">
-          <span class="year-badge" :style="item.action === 'returned' ? 'background: #fff7ed; color: #d97706;' : ''">
+          <span class="year-badge" :style="item.action === 'returned' ? 'background: #ae845a; color: white;' : ''">
             {{ item.action === 'borrowed' ? '📖 Împrumutat' : '✅ Returnat' }}
           </span>
           
@@ -64,6 +62,8 @@ async function handleReturn(bookId) {
     </div>
   </div>
 </template>
+
+
 <style scoped>
 .container {
   max-width: 1100px;
@@ -85,7 +85,7 @@ async function handleReturn(bookId) {
 }
 
 .book-card {
-  background: white;
+  background: #F5F5DC;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0,0,0,0.08);
@@ -105,8 +105,8 @@ async function handleReturn(bookId) {
 }
 
 .year-badge {
-  background: #f0fdf4;
-  color: #16a34a;
+  background: #ae845a;
+  color: white;
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
   font-size: 0.8rem;
@@ -154,13 +154,13 @@ h3 {
 }
 
 .btn-borrow {
-  background: #42b983;
+  background: #5A3D2E;
   color: white;
   flex: 1;
 }
 
 .create-btn {
-  background: #42b983;
+  background: #5A3D2E;
   color: white;
 }
 

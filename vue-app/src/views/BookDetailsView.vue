@@ -56,10 +56,9 @@ async function handleUpdate() {
 
 async function handleBorrow() {
   await booksStore.borrowBook(id)
-  if (!booksStore.error) {
-    alert('Carte împrumutată cu succes!')
-    bookData.value.stock -= 1
-  }
+  //if (!booksStore.error) {
+  //  alert('Carte împrumutată cu succes!')
+ // }
 }
 
 async function handleReturn() {
@@ -155,13 +154,47 @@ async function handleDelete() {
 </template>
 
 <style scoped>
-.container { max-width: 600px; margin: 2rem auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+.container {background: #F5F5DC; max-width: 600px; margin: 2rem auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
 .form-group { margin-bottom: 1rem; }
 input { width: 100%; padding: 8px; margin-top: 5px; }
 .actions { margin-top: 20px; display: flex; gap: 10px; }
-.edit-btn { background: #3498db; color: white; border: none; padding: 10px; cursor: pointer; }
+.edit-btn { background: #341F1A; color: white; border: none; padding: 10px; cursor: pointer; }
 .delete-btn { background: #e74c3c; color: white; border: none; padding: 10px; cursor: pointer; }
-.save-btn { background: #2ecc71; color: white; border: none; padding: 10px; cursor: pointer; }
+.save-btn { background: #341F1A; color: white; border: none; padding: 10px; cursor: pointer; }
 .cancel-btn { background: #95a5a6; color: white; border: none; padding: 10px; cursor: pointer; }
-.back-btn { margin-top: 20px; background: none; border: 1px solid #ccc; cursor: pointer; }
+button.back-btn {
+  background-color: white !important; 
+  color: rgb(0, 0, 0);
+  margin-top: 20px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.borrow-btn { 
+  background-color: #653607; 
+  color: white; 
+  border: none; 
+  padding: 10px; 
+  cursor: pointer; 
+  border-radius: 4px;
+}
+
+
+.borrow-btn:disabled {
+  background-color: #cbd5e0;
+  cursor: not-allowed;
+}
+
+.btn-return { 
+  background-color: #5A3D2E; 
+  color: white; 
+  border: none; 
+  padding: 10px; 
+  cursor: pointer; 
+  border-radius: 4px;
+}
+
+.borrow-btn:hover:not(:disabled) { background-color: #6C4E3E; }
+.btn-return:hover { background-color: #A07761; }
 </style>

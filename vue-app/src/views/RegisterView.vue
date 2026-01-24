@@ -71,11 +71,11 @@ async function handleSubmit() {
 
 <style scoped>
 .register-container { max-width: 500px; margin: 3rem auto; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-h1 { color: #42b983; text-align: center; margin-bottom: 2rem; }
+h1 { color: #6B4C3D; text-align: center; margin-bottom: 2rem; }
 .register-form { display: flex; flex-direction: column; gap: 1.5rem; }
 .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
 input { padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px; }
-.submit-btn { padding: 1rem; background: #42b983; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+.submit-btn { padding: 1rem; background: #6B4C3D; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
 .submit-btn:disabled { background: #ccc; cursor: not-allowed; }
 .error { color: #e74c3c; font-size: 0.85rem; }
 .error-message { padding: 1rem; background: #fdeaea; color: #e74c3c; border-radius: 6px; border-left: 4px solid #e74c3c; }

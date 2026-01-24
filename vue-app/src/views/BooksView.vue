@@ -108,7 +108,7 @@ onUnmounted(() => {
 }
 
 .book-card {
-  background: white;
+  background: #F5F5DC;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0,0,0,0.08);
@@ -128,8 +128,8 @@ onUnmounted(() => {
 }
 
 .year-badge {
-  background: #f0fdf4;
-  color: #16a34a;
+  background: #ae845a;
+  color: white;
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
   font-size: 0.8rem;
@@ -177,13 +177,13 @@ h3 {
 }
 
 .btn-view {
-  background: #edf2f7;
-  color: #4a5568;
+  background: #e0bfa2;
+  color: #6C4E3E;
   flex: 1;
 }
 
 .btn-borrow {
-  background: #42b983;
+  background: #653607;
   color: white;
   flex: 2;
 }
@@ -194,7 +194,7 @@ h3 {
 }
 
 .create-btn {
-  background: #42b983;
+  background: #653607;
   color: white;
 }
 
