@@ -197,10 +197,10 @@ async function returnBook(bookId) {
     const data = await response.json()
     if (!response.ok) throw new Error(data.message || 'Eroare la returnare')
     
-    const bookIndex = books.value.findIndex(b => b.id === bookId)
-    if (bookIndex !== -1) {
-      books.value[bookIndex].currentQuantity += 1 
-    }
+    //const bookIndex = books.value.findIndex(b => b.id === bookId)
+    //if (bookIndex !== -1) {
+    //  books.value[bookIndex].currentQuantity += 1 
+    //}
     await fetchUserHistory()
     alert('Carte returnată cu succes!')
   } catch (err) {

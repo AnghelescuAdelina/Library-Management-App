@@ -43,7 +43,14 @@ const router = createRouter({
       name: 'history',
       component: () => import('../views/HistoryView.vue'),
       meta: {requiresAuth: true }
-    }
+    },
+
+   { 
+    path: '/books/edit/:id',
+    name: 'edit-book',
+    component: () => import('../views/EditBookView.vue'),
+    meta: { requiresAdmin: true }
+   }
   ],
 })
 

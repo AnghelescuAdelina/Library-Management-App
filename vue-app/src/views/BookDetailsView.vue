@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useBooksStore } from '@/stores/books'
 import { useAuthStore } from '@/stores/auth'
@@ -14,20 +14,40 @@ const id = route.params.id
 const isEditing = ref(false)
 const bookData = ref({ title: '', author: '', publishedYear: '', currentQuantity: 0 })
 
+watch(
+  () => booksStore.books, 
+  (newBooks) => {
+    const updatedBook = newBooks.find(b => b.id === id)
+    if (updatedBook) {
+      bookData.value = { 
+        ...updatedBook, 
+        quantity: updatedBook.initialQuantity 
+      }
+    }
+  },
+  { deep: true }
+)
+
 onMounted(async () => {
+  booksStore.subscribeToBooks()
   const book = booksStore.books.find(b => b.id === id)
   if (book) {
-    bookData.value = { ...book }
+    bookData.value = { ...book, quantity: book.initialQuantity }
   } else {
     const fetchedBook = await booksStore.fetchBook(id)
     if(fetchedBook){
-        bookData.value={...fetchedBook}
+        bookData.value={...fetchedBook, quantity: fetchedBook.initialQuantity}
     }
   }
 })
 
 async function handleUpdate() {
-  await booksStore.updateBook(id, bookData.value)
+ const dataToUpdate = {
+    ...bookData.value,
+    quantity: Number(bookData.value.quantity)
+  }
+  
+  await booksStore.updateBook(id, dataToUpdate)
   if (!booksStore.error) {
     isEditing.value = false
     alert('Cartea a fost actualizată!')
@@ -43,9 +63,10 @@ async function handleBorrow() {
 }
 
 async function handleReturn() {
-  await booksStore.returnBook(id)
-  if (!booksStore.error) {
-    bookData.value.currentQuantity += 1 
+  try {
+    await booksStore.returnBook(id)
+  } catch (err) {
+    console.error("Eroare la returnare:", err)
   }
 }
 
@@ -95,11 +116,37 @@ async function handleDelete() {
       </div>
     </div>
 
-    <form v-else @submit.prevent="handleUpdate">
-      <div class="actions">
-        <button type="submit" class="save-btn">Salvează</button>
-        <button type="button" @click="isEditing = false" class="cancel-btn">Anulează</button>
-      </div>
+    <form v-else @submit.prevent="handleUpdate" class="edit-form">
+      <div class="form-group">
+    <label>Titlu:</label>
+    <input v-model="bookData.title" type="text" required />
+  </div>
+  
+  <div class="form-group">
+    <label>Autor:</label>
+    <input v-model="bookData.author" type="text" required />
+  </div>
+
+  <div class="form-group">
+    <label>An Publicare:</label>
+    <input v-model.number="bookData.publishedYear" type="number" required />
+  </div>
+
+  <div class="form-group">
+    <label>Gen (optional):</label>
+    <input v-model="bookData.genre" type="text" />
+  </div>
+
+  <div class="form-group">
+    <label>Stoc Total (Număr total de exemplare):</label>
+    <input v-model.number="bookData.quantity" type="number" min="1" required />
+    <small>Modificarea acestui număr va ajusta capacitatea totală a bibliotecii.</small>
+  </div>
+
+  <div class="actions">
+    <button type="submit" class="save-btn">Salvează</button>
+    <button type="button" @click="isEditing = false" class="cancel-btn">Anulează</button>
+  </div>
     </form>
     
     <button @click="router.push('/books')" class="back-btn">← Înapoi la listă</button>

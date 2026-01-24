@@ -71,16 +71,22 @@ const updateBook = async (req, res) => {
         if (!book) {
             return res.status(404).json({ error: "Book not found" });
         }
-        const updatedData = {};
-        if (title) updatedData.title = title;
-        if (author) updatedData.author = author;
-        if (publishedYear) updatedData.publishedYear = parseInt(publishedYear);
-        if (genre) updatedData.genre = genre;
-        if (quantity){
-            updatedData.initialQuantity = parseInt(quantity);
-            const quantityDiff = parseInt(quantity) - book.initialQuantity;
-            updatedData.currentQuantity = book.currentQuantity + quantityDiff;
-            updatedData.available = updatedData.currentQuantity > 0;    
+        const updatedData = {
+            title: title || book.title,
+            author: author || book.author,
+            genre: genre || book.genre,
+            publishedYear: publishedYear ? parseInt(publishedYear) : book.publishedYear
+        };
+        if (quantity !== undefined && quantity !== null && quantity !== '') {
+            const newInitial = parseInt(quantity);
+            const quantityDiff = newInitial - (book.initialQuantity || 0);
+            
+            updatedData.initialQuantity = newInitial;
+            updatedData.currentQuantity = (book.currentQuantity || 0) + quantityDiff;
+            updatedData.available = updatedData.currentQuantity > 0;
+        } else {
+            updatedData.initialQuantity = book.initialQuantity;
+            updatedData.currentQuantity = book.currentQuantity;
         }
         const updatedBook = await update(id, updatedData);
         res.status(200).json(updatedBook);
