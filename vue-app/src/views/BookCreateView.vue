@@ -9,12 +9,16 @@ const router = useRouter()
 const title = ref('')
 const author = ref('')
 const publishedYear = ref('')
+const genre = ref('')
+const quantity = ref(1)
 
 async function handleSubmit() {
   const newBook = {
     title: title.value,
     author: author.value,
-    publishedYear: parseInt(publishedYear.value) 
+    publishedYear: parseInt(publishedYear.value),
+    genre: genre.value,
+    quantity: parseInt(quantity.value)
   }
 
   await booksStore.createBook(newBook)
@@ -43,7 +47,17 @@ async function handleSubmit() {
         <label>An Publicare:</label>
         <input v-model="publishedYear" type="number" required placeholder="Ex: 1920">
       </div>
-      
+
+      <div class="form-group">
+        <label>Cantitate exemplare:</label>
+        <input v-model="quantity" type="number" min="1" required placeholder="Câte cărți aduci în bibliotecă?">
+      </div>
+
+      <div class="form-group">
+        <label>Gen:</label>
+        <input v-model="genre" type="text" placeholder="Ex: Roman, SF, Poezie">
+      </div>
+
       <button type="submit" :disabled="booksStore.isLoading">
         {{ booksStore.isLoading ? 'Se salvează...' : 'Salvează Cartea' }}
       </button>
