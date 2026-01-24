@@ -22,6 +22,7 @@ const getUserHistory = async (req, res) => {
     }
 };
 
+
 module.exports = {
     getUserHistory
 };
