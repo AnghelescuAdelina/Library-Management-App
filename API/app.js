@@ -3,9 +3,10 @@ const cors = require('cors');
 const booksRoutes = require('./routes/books');
 const usersRoutes = require('./routes/users');
 const historyRoutes = require('./routes/history');
+const config = require('./config');
 
 const app = express();
-const PORT = 5000;
+const PORT = config.PORT || 5000;
 
 //Middleware: Log all incoming requests
 app.use((req, res, next) => {

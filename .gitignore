@@ -4,3 +4,4 @@ vue-app/node_modules/
 package-lock.json
 serviceAccount.json
 config.js
+.env
