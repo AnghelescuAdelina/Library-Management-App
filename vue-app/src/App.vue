@@ -28,7 +28,8 @@ function handleLogout() {
           </template>
 
           <template v-else>
-            <span class="welcome-msg">Salut, {{ authStore.user?.name || 'Utilizator' }}</span>
+            <span class="welcome-msg">Salut, {{ authStore.user?.userEmail || 'Utilizator' }}</span>
+            
             <button @click="handleLogout" class="btn-logout">Ieșire</button>
           </template>
         </div>
